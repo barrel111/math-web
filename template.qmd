@@ -1,0 +1,42 @@
+---
+title: example/tests
+format: math-web-html
+---
+
+## offerings
+
+### quality of life
+
+$$ \symbf{u} = (u_1, \dots, u_n) $$
+
+### basic delimiters
+
+$$ \parens{\frac{x^i}{2}}_{i \in \N}, \quad \E_{X \sim \text{Uni}(F)}\bracks{\frac{X}{2}}, \quad \braces{e^{\frac{2 \pi i j}{n}}}_{j \in [n - 1]}, \quad \set{z^2}{z\in \C}, \quad \ang{\vv x}{\vv y} = 0, $$
+
+$$ \abs{x - y} = 1, \quad \norm{\vv x + \vv y}_2 \le \norm{\vv x}_2 + \norm{\vv y}_2, \quad n = \ceil{\frac{n}{2}} + \floor{\frac{n}{2}}. $$
+
+### linear algebra
+
+$$ \Dim \Ker T + \Rk T = \Dim \text{dom} \, T $$
+
+$$ \tr A B C = \tr C A B = \tr B C A $$
+
+$$ \Id \, A = A = A \, \Id, \quad \id \circ f = f = f \circ \id $$
+
+$$ \det A = \sum_{\sigma \in S_n} \sgn(\sigma) \prod_{i = 1}^n a_{i, \sigma(i)} $$
+
+
+### probability
+
+$$ \Pr\parens{X = x} = 0, \quad \E[X] = np. $$
+$$ \quad \Var{X} = np(1 - p), \quad \Cov(Z, W) = \E\bracks{(X - \E X)(Y - \E Y)} . $$
+
+### real, imaginary
+
+$$ \Re z = \frac{z - \overline{z}}{2}, \quad \Im z = \frac{z + \overline{z}}{2}. $$
+
+### blackboard
+
+$$ \N, \Z, \Q, \R, \C $$
+$$ \Pr[X] \defeq \E[\1_X] $$
+

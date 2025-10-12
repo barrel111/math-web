@@ -1,0 +1,22 @@
+title: math on the web
+author: barrel111
+version: 1.0.0
+quarto-required: ">=1.7.0"
+contributes:
+  formats:
+    html:
+      theme: yeti
+      mainfont: EB Garamond
+
+      toc: true
+      toc-location: right
+
+      css: custom.scss
+
+      html-math-method: 
+        method: mathjax
+        url: "https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.js"
+
+      include-in-header:
+        - text: <script src="mathjax-config.js"></script>
+        - file: mathjax-config.html
