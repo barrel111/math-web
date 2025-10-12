@@ -1,6 +1,6 @@
 # math for quarto
 
-Just a bunch of commands for using math with quarto for HTML documents. Nothing fancy, just some unremarkable macros for MathJax.
+Nothing fancy, just some unremarkable macros for MathJax.
 
 ## installing
 
