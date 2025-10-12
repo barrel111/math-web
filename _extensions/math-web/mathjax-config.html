@@ -1,0 +1,112 @@
+<script>
+window.MathJax = {
+  tex: {
+    tags: "ams",
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+
+    macros: {
+      // ----------------------------------------------------------------
+      // Quality of Life
+      symbf: ["\\boldsymbol{#1}", 1],
+
+      // ----------------------------------------------------------------
+      // Basic delimiters
+      parens: ["\\left( #1 \\right)", 1],
+      bracks: ["\\left[ #1 \\right]", 1],
+      braces: ["\\left\\lbrace #1 \\right\\rbrace", 1],
+      set: ["\\left\\lbrace #1 \\mid #2 \\right\\rbrace", 2],
+      ang: ["\\left\\langle #1 , #2 \\right\\rangle", 2],
+      abs: ["\\left\\lvert #1 \\right\\rvert", 1],
+      norm: ["\\left\\lVert #1 \\right\\rVert", 1],
+      ceil: ["\\left\\lceil #1 \\right\\rceil", 1],
+      floor: ["\\left\\lfloor #1 \\right\\rfloor", 1],
+
+      // ----------------------------------------------------------------
+      // Linear algebra operators
+      Dim: "\\mathrm{dim}\\,",
+      Ker: "\\mathrm{ker}\\,",
+      Rk: "\\mathrm{rk}\\,",
+      tr: "\\mathrm{tr}\\,",
+      Id: "\\mathrm{Id}",
+      id: "\\mathrm{id}",
+      det: "\\mathrm{det}\\,",
+      sgn: "\\mathrm{sgn}\\,",
+
+      // ----------------------------------------------------------------
+      // Probability 
+      Pr: "\\mathop{\\mathbb{P}}",
+      E: "\\mathop{\\mathbb{E}}",
+      Var: "\\mathop{\\mathbf{Var}}",
+      Cov: "\\mathop{\\mathbf{Cov}}",
+
+      // ----------------------------------------------------------------
+      // Real and imaginary parts
+      Re: "\\mathrm{Re}\\,",
+      Im: "\\mathrm{Im}\\,",
+
+      // ----------------------------------------------------------------
+      // Blackboard bold symbols
+      "1": "\\Bbb{1}",
+      N: "\\mathbb{N}",
+      Z: "\\mathbb{Z}",
+      Q: "\\mathbb{Q}",
+      R: "\\mathbb{R}",
+      C: "\\mathbb{C}",
+
+      // ----------------------------------------------------------------
+      // Miscellaneous notation
+      Empty: "\\varnothing",
+      vv: ["\\boldsymbol{#1}", 1],
+      inv: "^{-1}",
+      Lim: ["\\lim\\limits_{#1}", 1],
+      eps: "\\varepsilon",
+      del: "\\delta",
+      lam: "\\lambda",
+
+      // ----------------------------------------------------------------
+      // Complexity classes
+      class: ["\\mathsf{#1}", 1],
+
+      // ----------------------------------------------------------------
+      // Big-O family and growth rates
+      Otilde: ["\\tilde{\\mathcal{O}}\\!\\left(#1\\right)", 1],
+      Ohat: ["\\widehat{\\mathcal{O}}\\!\\left(#1\\right)", 1],
+      Omegahat: ["\\widehat{\\Omega}\\!\\left(#1\\right)", 1],
+      bigO: ["\\mathcal{O}\\!\\left(#1\\right)", 1],
+      bigTheta: ["\\Theta\\!\\left(#1\\right)", 1],
+      bigOmega: ["\\Omega\\!\\left(#1\\right)", 1],
+      littleo: ["o\\!\\left(#1\\right)", 1],
+      littleomega: ["\\omega\\!\\left(#1\\right)", 1],
+      poly: "\\mathrm{poly}",
+      polylog: "\\mathrm{polylog}",
+      quasipoly: "\\mathrm{quasipoly}",
+
+      // ----------------------------------------------------------------
+      // Asymptotic relations and shortcuts
+      simconst: "\\mathrel{\\asymp}",
+      lt: ["o\\!\\left(#1\\right)", 1],
+      st: ["\\tilde{\\mathcal{O}}\\!\\left(#1\\right)", 1],
+      gt: ["\\omega\\!\\left(#1\\right)", 1],
+
+      // ----------------------------------------------------------------
+      // tcs
+      polytime: "\\mathsf{P}",
+      NPtime: "\\mathsf{NP}",
+      BPPtime: "\\mathsf{BPP}",
+      EXPtime: "\\mathsf{EXP}",
+      textsc: ['{\\rm #1{\\small #2}}', 2],
+      opt: ['\\textsc{O}{PT}'],
+      alg: ['\\textsc{A}{LG}'],
+
+      // ----------------------------------------------------------------
+      // Soft equalities
+      // defeq: "\\vcentcolon=",
+      defeq: "\\mathrel{:=}",
+      eqdef: "\\mathrel{=:}",
+    }
+  }
+};
+</script>
