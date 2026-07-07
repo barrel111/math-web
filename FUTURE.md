@@ -1,20 +1,15 @@
 # Roadmap
 
-## v1 — Static translation
-- User drops a `.sty` file into the project
-- A script parses `\newcommand`, `\renewcommand`, `\DeclareMathOperator`
-- Outputs a `mathjax-config.html` (replacing the current hardcoded one)
-- No filtering, no scanning — just "give me a `.sty`, I'll give you a working config"
-- Goal: replicate what we have now but driven by the user's own preamble
+## v1 — parser, MathJax
+- write a simple parser for LaTeX using Quarto hooks
+- recognizes `\newcommand`, `\renewcommand`, `\DeclareMathOperator`
+- takes a single .sty file and unconditionally generates MathJax
 
-## v2 — Usage filtering
-- Scan all `.qmd` files in the project for macro invocations
-- Only emit macros that are actually used
-- Warn on macros defined but never called
-- Goal: keep generated config lean, surface dead definitions
+## v2 — usage filtering
+- scan all `.qmd` files in the project for macro invocations
+- only emit macros that are actually used
+- warn on macros defined but never called (option-controlled, in quarto consolex)
 
-## v3 — Quarto integration
-- Run the script automatically as a Quarto pre-render hook so users never invoke it manually
-- Support multiple `.sty` files
-- Better error/skip reporting for patterns we can't translate (e.g. `\xspace`, conditionals)
-- Goal: zero-friction drop-in for existing LaTeX workflows
+## v3 — KaTeX, cosmetic
+- generate KaTeX
+- support multiple `.sty` files
