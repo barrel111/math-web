@@ -3,6 +3,8 @@ author: barrel111
 version: 1.0.0
 quarto-required: ">=1.7.0"
 contributes:
+  filters:
+    - math-web/sty.lua
   formats:
     html:
       theme: yeti
