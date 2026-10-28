@@ -4,9 +4,11 @@ version: 1.0.0
 quarto-required: ">=1.7.0"
 contributes:
   filters:
-    - math-web/sty.lua
+    - sty.lua
   formats:
     html:
+      filters:
+        - sty.lua
       theme: yeti
       mainfont: EB Garamond
 
@@ -18,7 +20,3 @@ contributes:
       html-math-method: 
         method: mathjax
         url: "https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.js"
-
-      include-in-header:
-        - text: <script src="mathjax-config.js"></script>
-        - file: mathjax-config.html

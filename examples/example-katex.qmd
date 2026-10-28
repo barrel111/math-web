@@ -1,0 +1,13 @@
+---
+title: "Shared LaTeX macros with KaTeX"
+format: math-web-html
+html-math-method: katex
+math-web:
+  macros: example-macros.sty
+---
+
+The real numbers are $\RR$, with paired notation $\pair{x}{y}$.
+
+$$\rankop(A) \leq \dim(V)$$
+
+$$\shift{y} \qquad \shift[z]{y}$$

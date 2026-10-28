@@ -1,0 +1,47 @@
+---
+title: "The supported notation subset"
+format: math-web-html
+math-web:
+  macros: contract-macros.sty
+  mappings:
+    labelstyle: mathsf
+---
+
+This example uses macros, named operators, and paired delimiters. Render it with
+either MathJax or KaTeX; the same style file supplies the declarations.
+
+## Macros and optional defaults
+
+The first argument of `\shifted` defaults to `x`:
+
+$$\shifted{y} \qquad \shifted[z]{y}$$
+
+The `labelstyle: mathsf` mapping explicitly chooses the appearance of a label.
+Mappings are ordinary aliases, so they can use names chosen for your own notation:
+
+$$\vectorspace{V}$$
+
+## Operators and delimiters
+
+The starred operator declaration gives its subscript limits-style placement:
+
+$$\best_{v\in V} f(v)$$
+
+Paired delimiters support fixed, automatic, and explicit sizing:
+
+$$\bracketpair{u}{v} \qquad \bracketpair*{\frac{u}{2}}{v} \qquad \bracketpair[\Big]{u}{v}$$
+
+## Renderer vocabulary
+
+These commands come from the renderer, without declarations in the style file:
+
+$$\boldsymbol{x} \xleftrightarrow{T} \boldsymbol{y}$$
+
+MathJax uses the same extension profile on every page, including `boldsymbol`
+and `mathtools`. KaTeX uses its built-in vocabulary. Support for individual body
+commands can differ between engines; successful declaration parsing alone does
+not validate their mathematical contents.
+
+For example, `\newcommand{\custom}{\unknownCommand{x}}` is a valid declaration
+in the supported syntax, but using `\custom` would produce a renderer error.
+Check representative formulas with each renderer before publishing.

@@ -1,0 +1,21 @@
+---
+title: "Macros from multiple style files"
+format: math-web-html
+math-web:
+  macros:
+    - example-macros.sty
+    - extra-macros.sty
+---
+
+The files are read in the listed order. `extra-macros.sty` defines $\plane$
+using $\RR$ from `example-macros.sty`.
+
+The second file also renews `\shift`, changing its optional default to $z$:
+
+$$\shift{y} \qquad \shift[x]{y}$$
+
+Declarations from the first file remain available:
+
+$$\pair{x}{y} \qquad \rankop(A)$$
+
+To use KaTeX, add `html-math-method: katex` to the front matter.

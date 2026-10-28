@@ -1,0 +1,10 @@
+*.html
+*.pdf
+*_files/
+
+/.quarto/
+
+.DS_Store
+node_modules/
+
+/sample-preamble/

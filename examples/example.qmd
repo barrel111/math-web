@@ -1,0 +1,15 @@
+---
+title: "Shared LaTeX macros in Quarto"
+format: math-web-html
+math-web:
+  macros: example-macros.sty
+---
+
+The real numbers are $\RR$. Both arguments of $\pair{x}{y}$ come from the
+same style file used by this document.
+
+$$\rankop(A) \leq \dim(V)$$
+
+An optional argument can use its default or be supplied explicitly:
+
+$$\shift{y} \qquad \shift[z]{y}$$

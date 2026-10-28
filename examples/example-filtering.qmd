@@ -1,0 +1,27 @@
+---
+title: "Per-page macro dependencies"
+format: math-web-html
+math-web:
+  macros:
+    - example-macros.sty
+    - extra-macros.sty
+---
+
+This page uses just one custom command:
+
+$$\plane$$
+
+The generated configuration contains `\plane` and its dependency `\RR`.
+The declarations for `\pair`, `\rankop`, and `\shift` are omitted from this
+page, even though the other examples use them.
+
+Mentioning commands in inline code or a code block does not retain them:
+
+```latex
+\pair{x}{y}
+\rankop(A)
+```
+
+For commands used by dynamically inserted math, add their names to
+`math-web.include`; their dependencies will also be retained. Set
+`math-web.filter: false` to emit every imported definition.
