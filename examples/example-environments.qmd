@@ -1,0 +1,32 @@
+---
+title: "Custom mathematical environments"
+format: math-web-html
+math-web:
+  macros: lp-macros.sty
+  hooks:
+    - lp.lua
+---
+
+The Lua module defines how to translate `lp` into aligned math. The extension
+handles balanced arguments and environment boundaries; the module chooses the
+layout of the objective and constraints. The same translation works with
+MathJax and KaTeX.
+
+$$
+\begin{lp}{\min_x}{\cost^\top x}
+  \lpconstraint[i=1,\ldots,m]{a_i^\top x \ge b_i}
+  \lpconstraint{x \ge 0}
+\end{lp}
+$$
+
+A complete raw LaTeX block can also be translated. This one supplies an explicit
+tag. Automatic numbering and cross-references are left to other filters.
+
+\begin{lp}[\mathrm{P}]{\min_x}{\cost^\top x}
+  \lpconstraint{Ax \ge b}
+  \lpconstraint{x \ge 0}
+\end{lp}
+
+The handler introduces `\subjectto`, which is imported from `lp-macros.sty`
+alongside the other declarations.
+No browser-side environment parser is added.

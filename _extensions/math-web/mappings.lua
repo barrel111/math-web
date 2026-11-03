@@ -5,6 +5,7 @@ local M = {}
 function M.apply(definitions, mappings)
   local result = {}
   for name, definition in pairs(definitions) do result[name] = definition end
+  local mapped_names = {}
   for name, target in pairs(mappings or {}) do
     if type(name) ~= "string" or type(target) ~= "string" then
       return nil, "mappings must associate command names with command names"
@@ -18,6 +19,8 @@ function M.apply(definitions, mappings)
       return nil, "invalid command mapping: " .. name .. " -> " .. target
     end
     if definitions[name] then return nil, "mapping would replace imported command \\" .. name end
+    if mapped_names[name] then return nil, "duplicate mapping for command \\" .. name end
+    mapped_names[name] = true
     result[name] = {name = name, body = "\\" .. target, nargs = 0, kind = "command",
       source = "math-web.mappings", line = 1, column = 1, mapped = true}
   end

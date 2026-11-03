@@ -1,7 +1,7 @@
 local directory = debug.getinfo(1, "S").source:sub(2):match("^(.*[/\\])") or "./"
 local parser = dofile(directory .. "parse.lua")
-local usage = dofile(directory .. "usage.lua")
 local mappings = dofile(directory .. "mappings.lua")
+local transforms = dofile(directory .. "transforms.lua")
 local renderers = {
   mathjax = dofile(directory .. "mathjax.lua"),
   katex = dofile(directory .. "katex.lua"),
@@ -21,6 +21,11 @@ local function read_settings(document)
   local settings = document.meta["math-web"]
   if not settings or pandoc.utils.type(settings) ~= "table" then
     fail("set 'math-web.macros' to a .sty path or a nonempty ordered list of paths")
+  end
+  for _, key in ipairs({"filter", "include"}) do
+    if settings[key] ~= nil then
+      fail("'math-web." .. key .. "' has been removed; delete this setting; all imported definitions are always available")
+    end
   end
   return settings
 end
@@ -46,16 +51,18 @@ local function renderer_name()
   return name
 end
 
-local function resolve_style_paths(entries)
+local function resolve_style_paths(entries, setting)
+  setting = setting or "macros"
+  local description = setting == "macros" and "a .sty path" or "a Lua module path"
   local paths = {}
   local document_directory = pandoc.path.directory(quarto.doc.input_file)
   for index, entry in ipairs(entries) do
     if not is_metadata_string(entry) then
-      fail("'math-web.macros' entry " .. index .. " must be a .sty path")
+      fail("'math-web." .. setting .. "' entry " .. index .. " must be " .. description)
     end
     local path = pandoc.utils.stringify(entry)
     if path:match("^%s*$") then
-      fail("'math-web.macros' entry " .. index .. " must not be empty")
+      fail("'math-web." .. setting .. "' entry " .. index .. " must not be empty")
     end
     -- Quarto already rebases inherited project paths relative to this document.
     if not pandoc.path.is_absolute(path) then
@@ -66,50 +73,10 @@ local function resolve_style_paths(entries)
   return paths
 end
 
-local function filtering_enabled(settings)
-  if settings.filter == nil then return true end
-  if type(settings.filter) ~= "boolean" then
-    fail("'math-web.filter' must be true or false")
-  end
-  return settings.filter
-end
-
-local function read_included_names(settings)
-  if settings.include == nil then return {} end
-  if pandoc.utils.type(settings.include) ~= "List" then
-    fail("'math-web.include' must be a list of command names")
-  end
-  local names = {}
-  for index, entry in ipairs(settings.include) do
-    if not is_metadata_string(entry) then
-      fail("'math-web.include' entry " .. index .. " must be a command name")
-    end
-    names[#names + 1] = pandoc.utils.stringify(entry)
-  end
-  return names
-end
-
-local function collect_math(document)
-  local expressions = {}
-  document:walk({
-    Math = function(math)
-      expressions[#expressions + 1] = math.text
-    end,
-  })
-  return expressions
-end
-
-local function select_page_definitions(document, settings, definitions)
-  local filter = filtering_enabled(settings)
-  local includes = read_included_names(settings)
-  local expressions = {}
-  if filter then expressions = collect_math(document) end
-
-  local selected, message, fallback = usage.select(definitions, expressions, includes)
-  if not selected then fail(message) end
-  if not filter then return definitions end
-  if fallback then quarto.log.warning("math-web: " .. fallback) end
-  return selected
+local function has_math(document)
+  local found = false
+  document:walk({Math = function() found = true end})
+  return found
 end
 
 local function read_mappings(settings)
@@ -125,15 +92,56 @@ local function read_mappings(settings)
   return mappings
 end
 
-local function include_configuration(name, definitions)
-  if name == "katex" then
-    -- Outrank KaTeX's later-loaded 1.21em rule without changing relative TeX sizes.
-    quarto.doc.include_text("in-header",
-      '<style id="math-web-font-size">.math .katex { font-size: 1em; }</style>\n')
-  end
+local function include_configuration(name, definitions, document)
   local javascript = renderers[name].generate(definitions)
   quarto.doc.include_text("in-header",
     '<script id="math-web-macros">\n' .. javascript .. '</script>\n')
+  if name == "katex" then
+    if has_math(document) then
+      local method = PANDOC_WRITER_OPTIONS.html_math_method
+      local url = type(method) ~= "string" and method.url or nil
+      document.meta.math = pandoc.MetaBlocks({pandoc.RawBlock("html", renderers.katex.html_math(url))})
+    end
+    -- Quarto creates this object in its template after the header includes.
+    -- Replace only its document-typesetting entry point, leaving KaTeX intact.
+    quarto.doc.include_text("after-body", '<script id="math-web-katex-quarto">\n'
+      .. 'globalThis.Quarto = globalThis.Quarto || {};\n'
+      .. 'globalThis.Quarto.typesetMath = MathWebKatex.typeset;\n</script>\n')
+  end
+end
+
+local function transform_document(document, settings, renderer)
+  if settings.hooks == nil then return document end
+  if pandoc.utils.type(settings.hooks) ~= "List" then fail("'math-web.hooks' must be a list of Lua module paths") end
+  local handlers = {}
+  local paths = resolve_style_paths(settings.hooks, "hooks")
+  for _, path in ipairs(paths) do
+    local ok, module = pcall(dofile, path)
+    if not ok then fail("loading hook " .. path .. ": " .. tostring(module)) end
+    local added, message = pcall(transforms.add, handlers, module)
+    if not added then fail(path .. ": " .. tostring(message)) end
+  end
+  if next(handlers) == nil then return document end
+  local index = 0
+  local function rewrite(text, display, block)
+    index = index + 1
+    local source = quarto.doc.input_file .. " (math fragment " .. index .. ")"
+    local ok, result, changed = pcall(transforms.transform, text, handlers,
+      {renderer = renderer, display = display}, source, block)
+    if not ok then fail(tostring(result)) end
+    return result, changed
+  end
+  return document:walk({
+    Math = function(math)
+      math.text = rewrite(math.text, math.mathtype == "DisplayMath", false)
+      return math
+    end,
+    RawBlock = function(raw)
+      if raw.format ~= "tex" and raw.format ~= "latex" then return nil end
+      local result, changed = rewrite(raw.text, true, true)
+      if changed then return pandoc.Para({pandoc.Math("DisplayMath", result)}) end
+    end,
+  })
 end
 
 local function convert_document(document)
@@ -152,8 +160,8 @@ local function convert_document(document)
 
   definitions, message = mappings.apply(definitions, read_mappings(settings))
   if not definitions then fail(message) end
-  definitions = select_page_definitions(document, settings, definitions)
-  include_configuration(name, definitions)
+  document = transform_document(document, settings, name)
+  include_configuration(name, definitions, document)
   return document
 end
 

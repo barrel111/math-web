@@ -1,49 +1,28 @@
 // Included inside the generated script's closure, with `preamble` supplied by
-// katex.lua. Use documented TeX commands and public KaTeX APIs, not token internals.
-const installedEngines = new WeakSet();
-
-function createMacros(engine) {
-  const macros = {};
+// katex.lua. The native engine and callers' macro maps are never modified.
+function createMacros(engine, initialMacros = {}) {
+  const macros = Object.assign({}, initialMacros);
   engine.renderToString(preamble, {macros, globalGroup: true, throwOnError: true});
   return macros;
 }
 
-function install(engine) {
-  if (!engine || installedEngines.has(engine)) return;
-  const importedMacros = createMacros(engine);
-  const defaultMacros = Object.assign({}, importedMacros);
-  const initializedMacroMaps = new WeakSet([defaultMacros]);
-  const originalRender = engine.render;
-  const originalRenderToString = engine.renderToString;
-
-  function optionsWithMacros(options = {}) {
-    const macros = options.macros || defaultMacros;
-    if (!initializedMacroMaps.has(macros)) {
-      // Import once per caller's macro map. Later global definitions retain
-      // KaTeX's normal persistence semantics across expressions.
-      for (const [name, definition] of Object.entries(importedMacros)) {
-        if (!providedNames.has(name) || !Object.hasOwn(macros, name)) macros[name] = definition;
-      }
-      initializedMacroMaps.add(macros);
-    }
-    return Object.assign({}, options, {macros});
+function typeset(root, options = {}) {
+  const elements = [
+    ...(root.matches?.("span.math") ? [root] : []),
+    ...root.querySelectorAll("span.math"),
+  ].filter(element => !element.querySelector(".katex, .katex-error"));
+  if (!elements.length) return;
+  const engine = globalThis.katex;
+  if (!engine) throw new Error("math-web: KaTeX has not been loaded");
+  // Share state within this typesetting call, matching Quarto's math grouping.
+  // A later call starts a fresh group; callers can retain createMacros() output
+  // explicitly when they want a persistent scope for direct KaTeX API calls.
+  const macros = createMacros(engine, options.macros);
+  for (const element of elements) {
+    engine.render(element.textContent, element, Object.assign({
+      throwOnError: false, fleqn: false,
+    }, options, {macros, displayMode: element.classList.contains("display")}));
   }
-
-  engine.render = function (source, element, options) {
-    return originalRender.call(engine, source, element, optionsWithMacros(options));
-  };
-  engine.renderToString = function (source, options) {
-    return originalRenderToString.call(engine, source, optionsWithMacros(options));
-  };
-  installedEngines.add(engine);
 }
 
-globalThis.MathWebKatex = {createMacros, install};
-install(globalThis.katex);
-if (typeof document !== "undefined") {
-  // Quarto/Pandoc registers its initial render on DOMContentLoaded. This
-  // header is earlier, and script-load capture also covers synchronous loaders.
-  const initialize = () => install(globalThis.katex);
-  document.addEventListener("load", initialize, true);
-  document.addEventListener("DOMContentLoaded", initialize, {once: true});
-}
+globalThis.MathWebKatex = {createMacros, typeset};

@@ -1,6 +1,6 @@
 # math for quarto
 
-> **AI assistance:** OpenAI Codex was used extensively to help design and implement
+> AI was used extensively to help design and implement
 > this project and write its documentation.
 
 Reuse LaTeX macro declarations in Quarto with MathJax or KaTeX.
@@ -23,14 +23,14 @@ This will install the extension under the `_extensions` subdirectory. If you're 
 
 The [examples](examples/) directory contains MathJax and KaTeX examples sharing
 [example-macros.sty](examples/example-macros.sty), plus examples of multiple input
-files, per-page filtering, and the supported notation subset. From the repository root:
+files and the supported notation subset. From the repository root:
 
 ```sh
 quarto render examples/example.qmd
 quarto render examples/example-katex.qmd
 quarto render examples/example-multiple-files.qmd
-quarto render examples/example-filtering.qmd
 quarto render examples/example-contract.qmd
+quarto render examples/example-environments.qmd
 ```
 
 To select KaTeX for another example, add `-M html-math-method:katex`.
@@ -53,10 +53,15 @@ math-web:
 The format defaults to MathJax. Add `html-math-method: katex` to select KaTeX,
 as in [example-katex.qmd](examples/example-katex.qmd). Both examples use the same style file.
 
-Both renderers default to the surrounding text's font size for inline and
-display math: KaTeX uses `1em`; MathJax disables automatic x-height matching.
-Subscripts, fractions, and explicit TeX size commands retain their normal
-relative sizing. Explicit MathJax `chtml` sizing options are preserved.
+KaTeX pages load matching JavaScript and CSS pinned to `0.16.22`.
+To use a different deployment, set `html-math-method` to
+`{method: katex, url: "https://your-host/katex/dist/"}`; the URL is a directory
+containing `katex.min.js` and `katex.min.css`. Alternative URLs remain your choice
+of renderer version and assets.
+
+The extension leaves themes, text fonts, table-of-contents settings, and math
+sizing to your document and renderer configuration. The examples' presentation
+settings live in [examples/_metadata.yml](examples/_metadata.yml).
 
 To combine files, as in
 [example-multiple-files.qmd](examples/example-multiple-files.qmd),
@@ -93,8 +98,7 @@ Document-level paths are relative to the document. You can put the same
 settings in `_quarto.yml`, where paths are relative to the project root;
 Quarto adjusts inherited paths for nested documents. Absolute paths also work.
 
-To use your existing HTML format instead of the extension's theme, enable its
-filter explicitly:
+To use the extension with your existing HTML format, enable its filter explicitly:
 
 ```yaml
 format:
@@ -112,49 +116,22 @@ with an error. Both `mathjax` and `katex` are supported; non-HTML formats skip
 this filter. MathJax and KaTeX support different built-in commands, so a parsed
 macro's replacement body must also be supported by the selected renderer.
 
-## per-page dependency filtering
+## imported definitions
 
-Quarto builds now emit only the imported commands used in each page's math,
-plus their transitive dependencies. Filtering is enabled by default for both
-renderers and works across all listed style files. A command used only on a
-different page is not included. See [example-filtering.qmd](examples/example-filtering.qmd).
+Every final definition from the supplied files, plus explicit mappings, is
+embedded in every rendered HTML page. This includes commands absent from the
+initial math, so later JavaScript or other filters can use them without an
+inclusion list. Importing definitions does not itself load a renderer on a page
+with no math.
 
-The filter scans Pandoc math nodes, including math in titles, headings, tables,
-and footnotes. Inline code, code blocks, ordinary prose, raw HTML, and TeX
-comments are not usage roots. Dependencies come from the final replacement
-bodies, optional defaults, and paired delimiters; complete command names are matched, so `\RR`
-does not retain `\R`. Repeated references emit one definition. Dependency
-cycles terminate during filtering, though a recursively expanding macro can
-still fail when rendered. All input declarations are validated before filtering,
-including ones that are ultimately omitted.
+All declarations are validated, including commands never invoked on the page.
+Replacement bodies remain the renderer's responsibility; supplying an unused
+command does not require its body to be expanded.
 
-For math inserted by JavaScript or written in raw HTML, explicitly include the
-imported commands it needs:
-
-```yaml
-math-web:
-  macros: macros.sty
-  include: [plane, shift]
-```
-
-`include` is a list of imported command names, with or without a leading
-backslash. Included commands retain their dependencies even if no page math
-references them. Unknown names are errors. Math added by a later Lua filter,
-or dependencies hidden inside separately configured renderer macros, likewise
-need explicit inclusion. This setting supplies definitions; it does not load a
-renderer on a page for which Quarto otherwise would not load one.
-
-Set `math-web.filter: false` to preserve every imported definition. For literal
-command references, filtering computes the smallest dependency-closed set; it
-does not execute TeX or determine which conditional branches run. If page math
-or a retained definition uses `\csname` to compute a command name, all imported
-definitions are retained and a build diagnostic explains the fallback.
-
-This analysis runs at build time. The website receives the selected definitions,
-with no dependency scanner added to its JavaScript. Standalone converter scripts
-have no page input and continue to emit all definitions. Unused-definition
-warnings are not yet implemented.
-Filtering applies to imported definitions, not MathJax's fixed extension profile.
+Per-page pruning has been removed. Delete the obsolete `math-web.filter` and
+`math-web.include` settings from existing documents; either now produces a
+migration error. Standalone converters and Quarto use the same complete set of
+final definitions.
 
 ## explicit command mappings
 
@@ -172,6 +149,81 @@ Mappings associate command names with command names and preserve following
 arguments. They cannot overwrite imported definitions. Their targets must be
 supported by the selected renderer or defined in the imported files. These are
 explicit user choices; the importer does not substitute typography automatically.
+Names may have a leading backslash; duplicate names after removing that prefix
+are errors, even when their targets agree. This applies to YAML and CLI mappings.
+
+## custom mathematical environments
+
+Local Lua hooks translate custom math syntax into renderer-compatible TeX before
+rendering. They share the declaration parser's reader for comments, nested groups,
+escaped delimiters, argument extraction, and locations.
+The declaration subset itself is unchanged: hooks do not execute environment
+declarations from `.sty` files.
+
+```yaml
+math-web:
+  macros: lp-macros.sty
+  hooks:
+    - lp.lua
+```
+
+Paths follow the same document/project rules as macro files. Each module is local
+Lua code executed during rendering and returns an `environments` table. For example:
+
+```lua
+return {
+  environments = {
+    wrap = {
+      arguments = {"o", "m"},
+      render = function(node, context)
+        local subscript = node.args[1] ~= false and "_{" .. node.args[1] .. "}" or ""
+        return "\\boxed{" .. node.args[2] .. ":" .. node.body .. "}" .. subscript
+      end,
+    },
+  },
+}
+```
+
+The reader recognizes `\begin{wrap}[label]{argument} ... \end{wrap}`. Registered
+environments are matched by name and transformed from the inside outward.
+Their boundaries must be literal: `\begin{wrap}` and `\end{wrap}` must appear
+directly in the input, rather than being produced by macro expansion. For
+example, a command that expands to `\end{wrap}` cannot close a hook invocation.
+The handler receives `name`, `args`, transformed `body`, and the invocation's
+`source`, `line`, and `column`. Locations are relative to the math fragment or raw
+block, not absolute document line numbers. `context.renderer` is `mathjax` or
+`katex`; `context.display` indicates display math. The handler must return TeX text.
+
+Invocation argument specifications are a list of at most nine entries:
+
+| Entry | Value passed to the handler |
+| --- | --- |
+| `"m"` | Required braced contents; single unbraced TeX tokens are not accepted |
+| `"o"` | Optional bracketed contents, or `false` if absent; `[]` is an empty string |
+| `{default = "text"}` | Optional bracketed contents, or the specified default |
+
+`context.commands(text, handlers)` rewrites named command invocations using the
+same argument specifications and `render(node, context)` callbacks. It does not
+expand arbitrary TeX. The hook context exposes only `renderer`, `display`, and
+`commands`; reader internals are private.
+
+Hooks run on Pandoc math nodes and on raw TeX/LaTeX blocks that consist entirely
+of a registered environment. Raw blocks become display-math nodes. Other raw blocks,
+prose, code, and raw HTML are left alone. Unregistered math environments are
+passed through without checking their boundaries; their contents are still scanned
+for registered environments. For example, `\begin{matrix}x\matstop` passes through
+when `matrix` is unregistered, leaving expansion of `\matstop` and validation to
+MathJax or KaTeX. Matching is bounded to 64 nested registered environments;
+verbatim material, category-code changes, and general TeX execution are outside this reader's scope.
+Generated handler output is not repeatedly reprocessed. Duplicate handlers,
+malformed registered environments, load errors, and callback errors stop the build.
+
+[example-environments.qmd](examples/example-environments.qmd) uses the user-owned
+[lp.lua](examples/lp.lua) handler for objectives and constraints. It works with both
+renderers, supports an optional explicit math tag, and introduces a `\subjectto`
+macro imported from [lp-macros.sty](examples/lp-macros.sty).
+Automatic numbering and references remain the job of other filters. Hooks run only
+in the Quarto document pipeline; standalone macro converters do not transform math.
 
 ## standalone generation
 
@@ -203,14 +255,30 @@ unrelated macros and configuration settings. The output targets MathJax's
 operator definitions also require the AMS extension, included in the standard
 `tex-mml-chtml` component.
 
-For KaTeX, load the generated script before the renderer's first use. It imports
-definitions using KaTeX's public `renderToString` API with `globalGroup`, then
-adds them to the macro maps passed to `render` and `renderToString`. Existing
-unrelated macros and other render options are preserved. The Quarto integration
-handles script loading and subsequent `Quarto.typesetMath` calls automatically.
+For standalone KaTeX pages, load the generated script and pass its returned macro
+map explicitly to the native renderer:
+
+```javascript
+const macros = MathWebKatex.createMacros(katex, existingMacros);
+katex.render(tex, element, {macros, throwOnError: false});
+```
+
+The optional `existingMacros` argument is copied into a fresh map. Definitions
+are imported using KaTeX's public `renderToString` API with `globalGroup`.
+Keep the returned map to share later global definitions between expressions;
+create another map for an independent scope. Native `katex.render` and
+`katex.renderToString` remain unchanged, and input macro maps are never modified.
+
+The Quarto integration handles the pinned assets, initial rendering, and later
+`Quarto.typesetMath` calls through `MathWebKatex.typeset(root, options)`.
+This typesets `span.math` elements, skips already rendered elements, and creates
+an independent macro scope for each call, shared by the expressions in that call.
+Only Quarto's typesetting entry point is adapted; unrelated KaTeX consumers keep
+their own configuration.
 The implementation uses supported TeX definitions to preserve declared arity
 and optional defaults, without depending on KaTeX's internal token API.
-See [KaTeX options](https://katex.org/docs/options).
+See [KaTeX options](https://katex.org/docs/options) and
+[persistent macro scopes](https://katex.org/docs/api#persistent-macros).
 
 ## supported declarations
 
