@@ -1,0 +1,53 @@
+---
+title: "Notation preamble fixtures"
+format: math-web-html
+math-web:
+  macros:
+    - math-core.sty
+    - math-prob.sty
+    - math-complexity.sty
+    - math-analysis.sty
+    - math-opt.sty
+  mappings:
+    mathds: mathbf
+    textsc: mathrm
+---
+
+These examples import the repository-owned notation fixtures. The explicit `mathds: mathbf`
+mapping chooses a bold indicator symbol in place of the LaTeX `dsfont` glyph.
+The explicit `textsc: mathrm` mapping renders `\opt` as upright “Opt” without
+small caps. The mapping arrow is defined in `math-core.sty`.
+
+## Delimiters and vectors
+
+$$\parens{x} \qquad \parens*{\frac{x}{2}} \qquad \parens[\Big]{x}$$
+
+$$\set*{x\in\R}{x>0} \qquad \ang{\vv x,\vv y}$$
+
+$$\norm[\Big]{\vv x} + \abs*{\frac{x}{2}} + \ceil{x} + \floor{x}$$
+
+## Number sets and probability
+
+$$\N\subset\Z\subset\Q\subset\R\subset\C$$
+
+$$\Pr(A) \defeq \E\bracks{\1_A}$$
+
+$$\Var(X) \qquad \Cov(X,Y) \qquad \Corr(X,Y)$$
+
+$$X_n\convd X \qquad X_n\convp X \qquad X_n\convas X$$
+
+## Analysis
+
+$$\inner{u}{v}_H \qquad \inner*{\frac{u}{2}}{v}_H \qquad \inner[\Big]{u}{v}_H$$
+
+$$\Lp{p}\!\parens*{\Omega} \qquad \norm[\Big]{f}_p$$
+
+## Optimization and complexity
+
+$$\opt \qquad \conv(S) \qquad \cone(S) \qquad \aff(S) \qquad \base$$
+
+$$\OO{n\log n} \qquad \poly(n) \qquad \polytime$$
+
+## Padded mapping arrow
+
+$$x\fmapsto[\text{below}]{\text{above}}f(x)$$

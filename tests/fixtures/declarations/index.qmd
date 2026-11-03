@@ -1,0 +1,23 @@
+---
+title: "Declaration syntax"
+format: html
+html-math-method: mathjax
+---
+
+Each left expression should render like its explicit right-hand expansion.
+
+$$\RR \qquad \mathbb{R}$$
+$$\pair{a}{b} \qquad \left\langle a,\frac{b}{2}\right\rangle$$
+$$\choice \qquad new$$
+$$\rankop(A) \qquad \operatorname{rank}(A)$$
+
+Proposed syntax cases:
+
+$$\withDefault{y} \qquad x+y$$
+$$\withDefault[z]{y} \qquad z+y$$
+$$\argmaxop_{x\in\RR} f(x) \qquad \operatorname*{arg\,max}_{x\in\mathbb{R}} f(x)$$
+$$\bare \qquad b$$
+$$\spaced{a} \qquad \frac{a}{2}$$
+$$\literalBraces{x} \qquad \{x\}$$
+$$\percent \qquad 50\%$$
+$$\joined \qquad a+b$$

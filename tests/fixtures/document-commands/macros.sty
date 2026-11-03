@@ -1,0 +1,12 @@
+\NewDocumentCommand{\DocRR}{}{\mathbb{R}}
+\NewDocumentCommand{\docpair}{m m}{\left\langle #1,#2\right\rangle}
+% The second argument must be consumed even though it is absent from the body.
+\NewDocumentCommand{\first}{m m}{#1}
+\NewDocumentCommand{\shift}{O{x} m}{#1+#2}
+\NewDocumentCommand{\emptyDefault}{O{} m}{#1#2}
+\NewDocumentCommand{\groupDefault}{O{{x+y}} m}{#1^{#2}}
+\NewDocumentCommand{\replaced}{m}{#1}
+\RenewDocumentCommand{\replaced}{}{new}
+\DeclareDocumentCommand{\replaced}{}{final}
+\DeclareDocumentCommand{\fresh}{m}{#1^2}
+\NewDocumentCommand{\unusedDocumentMacro}{}{u}

@@ -1,0 +1,16 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{math-opt}[optimization notation]
+
+% For lp/lppair and their helpers, also load preamble-envs.
+% The opt option of preamble loads both packages.
+\RequirePackage{amsmath,xparse}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\aff}{aff}
+
+\newcommand{\base}{\mathcal{B}}
+
+\NewDocumentCommand{\opt}{}{\textsc{Opt}}
+
+\endinput

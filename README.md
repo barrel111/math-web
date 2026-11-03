@@ -50,6 +50,11 @@ math-web:
 ---
 ```
 
+The supported `math-web` settings are `macros`, `hooks`, and `mappings`;
+unknown settings are errors. You can omit `macros` when using only hooks or
+mappings, without creating an empty `.sty` file. An explicitly supplied `macros`
+value must still be a nonempty path or a nonempty ordered list of paths.
+
 The format defaults to MathJax. Add `html-math-method: katex` to select KaTeX,
 as in [example-katex.qmd](examples/example-katex.qmd). Both examples use the same style file.
 
@@ -163,10 +168,10 @@ declarations from `.sty` files.
 ```yaml
 math-web:
   macros: lp-macros.sty
-  hooks:
-    - lp.lua
+  hooks: lp.lua
 ```
 
+Both `hooks` and `macros` accept a single path or an ordered list of paths.
 Paths follow the same document/project rules as macro files. Each module is local
 Lua code executed during rendering and returns an `environments` table. For example:
 
@@ -217,6 +222,8 @@ MathJax or KaTeX. Matching is bounded to 64 nested registered environments;
 verbatim material, category-code changes, and general TeX execution are outside this reader's scope.
 Generated handler output is not repeatedly reprocessed. Duplicate handlers,
 malformed registered environments, load errors, and callback errors stop the build.
+Replacements preserve control-word boundaries: a hook returning `\alpha` before
+`x` produces `\alpha x`, without adding braces or changing math grouping.
 
 [example-environments.qmd](examples/example-environments.qmd) uses the user-owned
 [lp.lua](examples/lp.lua) handler for objectives and constraints. It works with both

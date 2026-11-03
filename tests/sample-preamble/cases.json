@@ -1,0 +1,614 @@
+[
+  {
+    "name": "parens ordinary",
+    "command": "parens",
+    "tex": "\\parens{x}",
+    "expected": "( x )"
+  },
+  {
+    "name": "parens automatic",
+    "command": "parens",
+    "tex": "\\parens*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left( \\frac{x}{2}\\right)}\\mathclose{}"
+  },
+  {
+    "name": "parens sized",
+    "command": "parens",
+    "tex": "\\parens[\\Big]{x}",
+    "expected": "\\Bigl( x \\Bigr)"
+  },
+  {
+    "name": "bracks ordinary",
+    "command": "bracks",
+    "tex": "\\bracks{x}",
+    "expected": "[ x ]"
+  },
+  {
+    "name": "bracks automatic",
+    "command": "bracks",
+    "tex": "\\bracks*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left[ \\frac{x}{2}\\right]}\\mathclose{}"
+  },
+  {
+    "name": "bracks sized",
+    "command": "bracks",
+    "tex": "\\bracks[\\Big]{x}",
+    "expected": "\\Bigl[ x \\Bigr]"
+  },
+  {
+    "name": "braces ordinary",
+    "command": "braces",
+    "tex": "\\braces{x}",
+    "expected": "\\lbrace x \\rbrace"
+  },
+  {
+    "name": "braces automatic",
+    "command": "braces",
+    "tex": "\\braces*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left\\lbrace \\frac{x}{2}\\right\\rbrace}\\mathclose{}"
+  },
+  {
+    "name": "braces sized",
+    "command": "braces",
+    "tex": "\\braces[\\Big]{x}",
+    "expected": "\\Bigl\\lbrace x \\Bigr\\rbrace"
+  },
+  {
+    "name": "ang ordinary",
+    "command": "ang",
+    "tex": "\\ang{x}",
+    "expected": "\\langle x \\rangle"
+  },
+  {
+    "name": "ang automatic",
+    "command": "ang",
+    "tex": "\\ang*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left\\langle \\frac{x}{2}\\right\\rangle}\\mathclose{}"
+  },
+  {
+    "name": "ang sized",
+    "command": "ang",
+    "tex": "\\ang[\\Big]{x}",
+    "expected": "\\Bigl\\langle x \\Bigr\\rangle"
+  },
+  {
+    "name": "abs ordinary",
+    "command": "abs",
+    "tex": "\\abs{x}",
+    "expected": "\\lvert x \\rvert"
+  },
+  {
+    "name": "abs automatic",
+    "command": "abs",
+    "tex": "\\abs*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left\\lvert \\frac{x}{2}\\right\\rvert}\\mathclose{}"
+  },
+  {
+    "name": "abs sized",
+    "command": "abs",
+    "tex": "\\abs[\\Big]{x}",
+    "expected": "\\Bigl\\lvert x \\Bigr\\rvert"
+  },
+  {
+    "name": "norm ordinary",
+    "command": "norm",
+    "tex": "\\norm{x}",
+    "expected": "\\lVert x \\rVert"
+  },
+  {
+    "name": "norm automatic",
+    "command": "norm",
+    "tex": "\\norm*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left\\lVert \\frac{x}{2}\\right\\rVert}\\mathclose{}"
+  },
+  {
+    "name": "norm sized",
+    "command": "norm",
+    "tex": "\\norm[\\Big]{x}",
+    "expected": "\\Bigl\\lVert x \\Bigr\\rVert"
+  },
+  {
+    "name": "ceil ordinary",
+    "command": "ceil",
+    "tex": "\\ceil{x}",
+    "expected": "\\lceil x \\rceil"
+  },
+  {
+    "name": "ceil automatic",
+    "command": "ceil",
+    "tex": "\\ceil*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left\\lceil \\frac{x}{2}\\right\\rceil}\\mathclose{}"
+  },
+  {
+    "name": "ceil sized",
+    "command": "ceil",
+    "tex": "\\ceil[\\Big]{x}",
+    "expected": "\\Bigl\\lceil x \\Bigr\\rceil"
+  },
+  {
+    "name": "floor ordinary",
+    "command": "floor",
+    "tex": "\\floor{x}",
+    "expected": "\\lfloor x \\rfloor"
+  },
+  {
+    "name": "floor automatic",
+    "command": "floor",
+    "tex": "\\floor*{\\frac{x}{2}}",
+    "expected": "\\mathopen{\\left\\lfloor \\frac{x}{2}\\right\\rfloor}\\mathclose{}"
+  },
+  {
+    "name": "floor sized",
+    "command": "floor",
+    "tex": "\\floor[\\Big]{x}",
+    "expected": "\\Bigl\\lfloor x \\Bigr\\rfloor"
+  },
+  {
+    "name": "set ordinary",
+    "command": "set",
+    "tex": "\\set{x}{x\\in\\R}",
+    "expected": "\\lbrace x\\;\\vert\\;x\\in\\mathbb{R}\\rbrace"
+  },
+  {
+    "name": "set automatic",
+    "command": "set",
+    "tex": "\\set*{x}{x\\in\\R}",
+    "expected": "\\mathopen{\\left\\lbrace x\\;\\middle\\vert\\;x\\in\\mathbb{R}\\right\\rbrace}\\mathclose{}"
+  },
+  {
+    "name": "set big",
+    "command": "set",
+    "tex": "\\set[\\big]{x}{x\\in\\R}",
+    "expected": "\\bigl\\lbrace x\\;\\big\\vert\\;x\\in\\mathbb{R}\\bigr\\rbrace"
+  },
+  {
+    "name": "set Big",
+    "command": "set",
+    "tex": "\\set[\\Big]{x}{x\\in\\R}",
+    "expected": "\\Bigl\\lbrace x\\;\\Big\\vert\\;x\\in\\mathbb{R}\\Bigr\\rbrace"
+  },
+  {
+    "name": "set bigg",
+    "command": "set",
+    "tex": "\\set[\\bigg]{x}{x\\in\\R}",
+    "expected": "\\biggl\\lbrace x\\;\\bigg\\vert\\;x\\in\\mathbb{R}\\biggr\\rbrace"
+  },
+  {
+    "name": "set Bigg",
+    "command": "set",
+    "tex": "\\set[\\Bigg]{x}{x\\in\\R}",
+    "expected": "\\Biggl\\lbrace x\\;\\Bigg\\vert\\;x\\in\\mathbb{R}\\Biggr\\rbrace"
+  },
+  {
+    "name": "nested delimiters",
+    "command": "norm",
+    "tex": "\\norm*{\\parens[\\Big]{x}+\\abs{y}}",
+    "expected": "\\mathopen{\\left\\lVert\\Bigl(x\\Bigr)+\\lvert y\\rvert\\right\\rVert}\\mathclose{}"
+  },
+  {
+    "name": "nested set sizes",
+    "command": "set",
+    "tex": "\\set[\\Big]{\\set[\\big]{x}{x>0}}{x<1}",
+    "expected": "\\Bigl\\lbrace\\bigl\\lbrace x\\;\\big\\vert\\;x>0\\bigr\\rbrace\\;\\Big\\vert\\;x<1\\Bigr\\rbrace"
+  },
+  {
+    "name": "Re",
+    "command": "Re",
+    "tex": "a\\Re(X)",
+    "expected": "a\\operatorname{Re}(X)"
+  },
+  {
+    "name": "Im",
+    "command": "Im",
+    "tex": "a\\Im(X)",
+    "expected": "a\\operatorname{Im}(X)"
+  },
+  {
+    "name": "Var",
+    "command": "Var",
+    "tex": "a\\Var(X)",
+    "expected": "a\\operatorname{Var}(X)"
+  },
+  {
+    "name": "Cov",
+    "command": "Cov",
+    "tex": "a\\Cov(X)",
+    "expected": "a\\operatorname{Cov}(X)"
+  },
+  {
+    "name": "Corr",
+    "command": "Corr",
+    "tex": "a\\Corr(X)",
+    "expected": "a\\operatorname{Corr}(X)"
+  },
+  {
+    "name": "argmax",
+    "command": "argmax",
+    "tex": "\\argmax_{x\\in\\R}f(x)",
+    "expected": "\\operatorname*{arg\\,max}_{x\\in\\mathbb{R}}f(x)"
+  },
+  {
+    "name": "argmin",
+    "command": "argmin",
+    "tex": "\\argmin_{x\\in\\R}f(x)",
+    "expected": "\\operatorname*{arg\\,min}_{x\\in\\mathbb{R}}f(x)"
+  },
+  {
+    "name": "1",
+    "command": "1",
+    "tex": "\\1",
+    "expected": "\\mathbf{1}"
+  },
+  {
+    "name": "N",
+    "command": "N",
+    "tex": "\\N",
+    "expected": "\\mathbb{N}"
+  },
+  {
+    "name": "Z",
+    "command": "Z",
+    "tex": "\\Z",
+    "expected": "\\mathbb{Z}"
+  },
+  {
+    "name": "Q",
+    "command": "Q",
+    "tex": "\\Q",
+    "expected": "\\mathbb{Q}"
+  },
+  {
+    "name": "R",
+    "command": "R",
+    "tex": "\\R",
+    "expected": "\\mathbb{R}"
+  },
+  {
+    "name": "C",
+    "command": "C",
+    "tex": "\\C",
+    "expected": "\\mathbb{C}"
+  },
+  {
+    "name": "Pr",
+    "command": "Pr",
+    "tex": "\\Pr",
+    "expected": "\\mathbb{P}"
+  },
+  {
+    "name": "E",
+    "command": "E",
+    "tex": "\\E",
+    "expected": "\\mathbb{E}"
+  },
+  {
+    "name": "e",
+    "command": "e",
+    "tex": "\\e",
+    "expected": "\\mathcal{E}"
+  },
+  {
+    "name": "f",
+    "command": "f",
+    "tex": "\\f",
+    "expected": "\\mathcal{F}"
+  },
+  {
+    "name": "normal",
+    "command": "normal",
+    "tex": "\\normal",
+    "expected": "\\mathcal{N}"
+  },
+  {
+    "name": "Empty",
+    "command": "Empty",
+    "tex": "\\Empty",
+    "expected": "\\varnothing"
+  },
+  {
+    "name": "eps",
+    "command": "eps",
+    "tex": "\\eps",
+    "expected": "\\varepsilon"
+  },
+  {
+    "name": "del",
+    "command": "del",
+    "tex": "\\del",
+    "expected": "\\delta"
+  },
+  {
+    "name": "lam",
+    "command": "lam",
+    "tex": "\\lam",
+    "expected": "\\lambda"
+  },
+  {
+    "name": "defeq",
+    "command": "defeq",
+    "tex": "\\defeq",
+    "expected": "\\coloneqq"
+  },
+  {
+    "name": "eqdef",
+    "command": "eqdef",
+    "tex": "\\eqdef",
+    "expected": "\\eqqcolon"
+  },
+  {
+    "name": "symbf",
+    "command": "symbf",
+    "tex": "\\symbf{x}",
+    "expected": {
+      "mathjax": "\\mathbf{x}",
+      "katex": "\\boldsymbol{x}"
+    }
+  },
+  {
+    "name": "vv",
+    "command": "vv",
+    "tex": "\\vv{x}",
+    "expected": {
+      "mathjax": "\\mathbf{x}",
+      "katex": "\\boldsymbol{x}"
+    }
+  },
+  {
+    "name": "inverse",
+    "command": "inv",
+    "tex": "A\\inv",
+    "expected": "A{}^{-1}"
+  },
+  {
+    "name": "limit",
+    "command": "Lim",
+    "tex": "\\Lim{n\\to\\infty}x_n",
+    "expected": "\\lim\\limits_{n\\to\\infty}x_n"
+  },
+  {
+    "name": "covariance alias",
+    "command": "cov",
+    "tex": "\\cov(X,Y)",
+    "expected": "\\operatorname{Cov}(X,Y)"
+  },
+  {
+    "name": "correlation alias",
+    "command": "corr",
+    "tex": "\\corr(X,Y)",
+    "expected": "\\operatorname{Corr}(X,Y)"
+  },
+  {
+    "name": "distribution equality",
+    "command": "eqd",
+    "tex": "X\\eqd Y",
+    "expected": "X\\overset{d}{=}Y"
+  },
+  {
+    "name": "convd",
+    "command": "convd",
+    "tex": "X_n\\convd X",
+    "expected": "X_n\\xRightarrow{\\mkern8mu d\\mkern8mu}X"
+  },
+  {
+    "name": "convp",
+    "command": "convp",
+    "tex": "X_n\\convp X",
+    "expected": "X_n\\xrightarrow{\\mkern8mu P\\mkern8mu}X"
+  },
+  {
+    "name": "convas",
+    "command": "convas",
+    "tex": "X_n\\convas X",
+    "expected": "X_n\\xrightarrow{\\mkern8mu\\mathrm{a.s.}\\mkern8mu}X"
+  },
+  {
+    "name": "analysis Rk",
+    "command": "Rk",
+    "tex": "a\\Rk(X)",
+    "expected": "a\\operatorname{rk}(X)"
+  },
+  {
+    "name": "analysis tr",
+    "command": "tr",
+    "tex": "a\\tr(X)",
+    "expected": "a\\operatorname{tr}(X)"
+  },
+  {
+    "name": "analysis Id",
+    "command": "Id",
+    "tex": "a\\Id(X)",
+    "expected": "a\\operatorname{Id}(X)"
+  },
+  {
+    "name": "analysis id",
+    "command": "id",
+    "tex": "a\\id(X)",
+    "expected": "a\\operatorname{id}(X)"
+  },
+  {
+    "name": "analysis Span",
+    "command": "Span",
+    "tex": "a\\Span(X)",
+    "expected": "a\\operatorname{span}(X)"
+  },
+  {
+    "name": "analysis im",
+    "command": "im",
+    "tex": "a\\im(X)",
+    "expected": "a\\operatorname{im}(X)"
+  },
+  {
+    "name": "analysis proj",
+    "command": "proj",
+    "tex": "a\\proj(X)",
+    "expected": "a\\operatorname{proj}(X)"
+  },
+  {
+    "name": "analysis supp",
+    "command": "supp",
+    "tex": "a\\supp(X)",
+    "expected": "a\\operatorname{supp}(X)"
+  },
+  {
+    "name": "inner fixed with subscript",
+    "command": "inner",
+    "tex": "\\inner{u}{v}_H",
+    "expected": "\\langle u,\\,v\\rangle_H"
+  },
+  {
+    "name": "inner automatic with subscript",
+    "command": "inner",
+    "tex": "\\inner*{\\frac{u}{2}}{v}_H",
+    "expected": "\\mathopen{\\left\\langle\\frac{u}{2},\\,v\\right\\rangle}\\mathclose{}_H"
+  },
+  {
+    "name": "inner explicit size with subscript",
+    "command": "inner",
+    "tex": "\\inner[\\Big]{u}{v}_H",
+    "expected": "\\Bigl\\langle u,\\,v\\Bigr\\rangle_H"
+  },
+  {
+    "name": "Lp space",
+    "command": "Lp",
+    "tex": "\\Lp{p}",
+    "expected": "L^{p}"
+  },
+  {
+    "name": "Lp with explicit domain",
+    "command": "Lp",
+    "tex": "\\Lp{p}\\!\\parens*{\\Omega}",
+    "expected": "L^{p}\\!\\mathopen{\\left(\\Omega\\right)}\\mathclose{}"
+  },
+  {
+    "name": "optimization conv",
+    "command": "conv",
+    "tex": "a\\conv(S)",
+    "expected": "a\\operatorname{conv}(S)"
+  },
+  {
+    "name": "optimization cone",
+    "command": "cone",
+    "tex": "a\\cone(S)",
+    "expected": "a\\operatorname{cone}(S)"
+  },
+  {
+    "name": "optimization aff",
+    "command": "aff",
+    "tex": "a\\aff(S)",
+    "expected": "a\\operatorname{aff}(S)"
+  },
+  {
+    "name": "optimization basis",
+    "command": "base",
+    "tex": "\\base",
+    "expected": "\\mathcal{B}"
+  },
+  {
+    "name": "explicit upright Opt substitution",
+    "command": "opt",
+    "tex": "\\opt",
+    "expected": "\\mathrm{Opt}"
+  },
+  {
+    "name": "complexity class",
+    "command": "class",
+    "tex": "\\class{BQP}",
+    "expected": "\\mathsf{BQP}"
+  },
+  {
+    "name": "complexity Otilde",
+    "command": "Otilde",
+    "tex": "\\Otilde{n}",
+    "expected": "\\tilde{\\mathcal{O}}\\mathopen{\\left(n\\right)}\\mathclose{}"
+  },
+  {
+    "name": "complexity OO",
+    "command": "OO",
+    "tex": "\\OO{n}",
+    "expected": "\\mathcal{O}\\mathopen{\\left(n\\right)}\\mathclose{}"
+  },
+  {
+    "name": "complexity Th",
+    "command": "Th",
+    "tex": "\\Th{n}",
+    "expected": "\\Theta\\mathopen{\\left(n\\right)}\\mathclose{}"
+  },
+  {
+    "name": "complexity Om",
+    "command": "Om",
+    "tex": "\\Om{n}",
+    "expected": "\\Omega\\mathopen{\\left(n\\right)}\\mathclose{}"
+  },
+  {
+    "name": "complexity oo",
+    "command": "oo",
+    "tex": "\\oo{n}",
+    "expected": "o\\mathopen{\\left(n\\right)}\\mathclose{}"
+  },
+  {
+    "name": "complexity om",
+    "command": "om",
+    "tex": "\\om{n}",
+    "expected": "\\omega\\mathopen{\\left(n\\right)}\\mathclose{}"
+  },
+  {
+    "name": "complexity poly",
+    "command": "poly",
+    "tex": "\\poly",
+    "expected": "\\operatorname{poly}"
+  },
+  {
+    "name": "complexity polylog",
+    "command": "polylog",
+    "tex": "\\polylog",
+    "expected": "\\operatorname{polylog}"
+  },
+  {
+    "name": "complexity quasipoly",
+    "command": "quasipoly",
+    "tex": "\\quasipoly",
+    "expected": "\\operatorname{quasipoly}"
+  },
+  {
+    "name": "complexity polytime",
+    "command": "polytime",
+    "tex": "\\polytime",
+    "expected": "\\mathsf{P}"
+  },
+  {
+    "name": "complexity NPtime",
+    "command": "NPtime",
+    "tex": "\\NPtime",
+    "expected": "\\mathsf{NP}"
+  },
+  {
+    "name": "complexity BPPtime",
+    "command": "BPPtime",
+    "tex": "\\BPPtime",
+    "expected": "\\mathsf{BPP}"
+  },
+  {
+    "name": "complexity EXPtime",
+    "command": "EXPtime",
+    "tex": "\\EXPtime",
+    "expected": "\\mathsf{EXP}"
+  },
+  {
+    "name": "fmapsto upper label",
+    "command": "fmapsto",
+    "tex": "x\\fmapsto{f}f(x)",
+    "expected": "x\\xmapsto[]{\\mkern8mu f\\mkern8mu}f(x)"
+  },
+  {
+    "name": "fmapsto lower label",
+    "command": "fmapsto",
+    "tex": "x\\fmapsto[\\text{below}]{f}f(x)",
+    "expected": "x\\xmapsto[\\text{below}]{\\mkern8mu f\\mkern8mu}f(x)"
+  },
+  {
+    "name": "fmapsto empty labels",
+    "command": "fmapsto",
+    "tex": "x\\fmapsto[]{}y",
+    "expected": "x\\xmapsto[]{\\mkern8mu\\mkern8mu}y"
+  }
+]

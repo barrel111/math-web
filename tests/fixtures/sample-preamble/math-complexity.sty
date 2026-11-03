@@ -1,0 +1,26 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{math-complexity}[complexity notation]
+
+\RequirePackage{math-core,amsmath,xparse}
+
+\NewDocumentCommand{\class}{m}{\mathsf{#1}}
+
+% asymptotics
+\NewDocumentCommand{\Otilde}{m}{\tilde{\mathcal{O}}\parens*{#1}}
+\NewDocumentCommand{\OO}{m}{\mathcal{O}\parens*{#1}}
+\NewDocumentCommand{\Th}{m}{\Theta\parens*{#1}}
+\NewDocumentCommand{\Om}{m}{\Omega\parens*{#1}}
+\NewDocumentCommand{\oo}{m}{o\parens*{#1}}
+\NewDocumentCommand{\om}{m}{\omega\parens*{#1}}
+
+\DeclareMathOperator{\poly}{poly}
+\DeclareMathOperator{\polylog}{polylog}
+\DeclareMathOperator{\quasipoly}{quasipoly}
+
+% Complexity classes
+\NewDocumentCommand{\polytime}{}{\class{P}}
+\NewDocumentCommand{\NPtime}{}{\class{NP}}
+\NewDocumentCommand{\BPPtime}{}{\class{BPP}}
+\NewDocumentCommand{\EXPtime}{}{\class{EXP}}
+
+\endinput

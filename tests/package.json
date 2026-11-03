@@ -1,0 +1,12 @@
+{
+  "name": "math-web-tests",
+  "private": true,
+  "scripts": {
+    "test": "sh run.sh"
+  },
+  "devDependencies": {
+    "@mathjax/src": "4.0.0",
+    "jsdom": "26.1.0",
+    "katex": "0.16.22"
+  }
+}

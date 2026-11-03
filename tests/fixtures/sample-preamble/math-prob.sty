@@ -1,0 +1,31 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{math-prob}[probability notation]
+
+\RequirePackage{amsmath,amssymb,mathtools,xparse}
+
+\let\Pr\relax
+
+\newcommand{\Pr}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\e}{\mathcal{E}}
+\newcommand{\f}{\mathcal{F}}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\newcommand{\cov}{\Cov}
+\DeclareMathOperator{\Corr}{Corr}
+\newcommand{\corr}{\Corr}
+
+\newcommand{\normal}{\mathcal{N}}
+
+% Equality in distribution: X \eqd Y.
+\NewDocumentCommand{\eqd}{}{\overset{d}{=}}
+
+% Convergence in distribution, in probability, and almost surely.
+% Usage: X_n \convd X (similarly for \convp and \convas).
+% Pad each label to give the arrows a little extra length.
+\NewDocumentCommand{\convd}{}{\xRightarrow{\mkern8mu d\mkern8mu}}
+\NewDocumentCommand{\convp}{}{\xrightarrow{\mkern8mu P\mkern8mu}}
+\NewDocumentCommand{\convas}{}{\xrightarrow{\mkern8mu\mathrm{a.s.}\mkern8mu}}
+
+\endinput

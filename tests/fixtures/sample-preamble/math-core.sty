@@ -1,0 +1,62 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{math-core}[2026/10/26 Shared mathematical notation]
+
+% Load after math font packages, which may replace symbols and vector commands.
+\RequirePackage{amsmath,amssymb,mathtools,xparse,dsfont}
+
+\providecommand{\symbf}{\boldsymbol}
+
+% ----------------------------------------------------------------
+% basic delimiters
+\DeclarePairedDelimiter{\parens}{(}{)}
+\DeclarePairedDelimiter{\bracks}{[}{]}
+\DeclarePairedDelimiter{\braces}{\lbrace}{\rbrace}
+\DeclarePairedDelimiterX{\set}[2]{\lbrace}{\rbrace}{#1 \;\delimsize\vert\; #2}
+\DeclarePairedDelimiter{\ang}{\langle}{\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+% ----------------------------------------------------------------
+% real and imaginary parts
+\let\Re\relax
+\let\Im\relax
+\DeclareMathOperator{\Re}{Re}
+\DeclareMathOperator{\Im}{Im}
+
+% optimization notation
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% ----------------------------------------------------------------
+% blackboard bold symbols
+% Web importers need renderer support or an explicit mapping for \mathds.
+\NewDocumentCommand{\1}{}{\mathds{1}}
+\NewDocumentCommand{\N}{}{\mathbb{N}}
+\NewDocumentCommand{\Z}{}{\mathbb{Z}}
+\NewDocumentCommand{\Q}{}{\mathbb{Q}}
+\NewDocumentCommand{\R}{}{\mathbb{R}}
+\NewDocumentCommand{\C}{}{\mathbb{C}}
+
+% ----------------------------------------------------------------
+% misc notation
+\providecommand{\Empty}{\varnothing}
+% Define independently of the vector command supplied by a math font package.
+\DeclareDocumentCommand{\vv}{m}{\symbf{#1}}
+\NewDocumentCommand{\inv}{}{{}^{-1}}
+\NewDocumentCommand{\Lim}{m}{\lim\limits_{#1}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\del}{\delta}
+\newcommand{\lam}{\lambda}
+
+\NewDocumentCommand{\defeq}{}{\coloneqq}
+\NewDocumentCommand{\eqdef}{}{\eqqcolon}
+
+% Mapping arrow with extra upper-label padding and an optional lower label.
+% Usage: x \fmapsto{f} f(x), or x \fmapsto[\text{below}]{f} f(x).
+\NewDocumentCommand{\fmapsto}{O{} m}{%
+  \xmapsto[#1]{\mkern8mu #2\mkern8mu}%
+}
+
+\endinput

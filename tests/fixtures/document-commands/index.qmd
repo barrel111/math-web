@@ -1,0 +1,14 @@
+---
+title: Document-command signatures
+format: html
+---
+
+$$\DocRR$$
+$$\docpair{a}{b}$$
+$$\first{a}{ignored}+b$$
+$$\shift{y}$$
+$$\shift[z]{y}$$
+$$\emptyDefault{y}$$
+$$\groupDefault{2}$$
+$$\replaced$$
+$$\fresh{x}$$

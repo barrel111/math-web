@@ -1,0 +1,25 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{math-analysis}[analysis notation]
+
+\RequirePackage{math-core,amsmath,mathtools,xparse}
+
+% note: \dim, \ker, \det are provided by amsmath
+\DeclareMathOperator{\Rk}{rk}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\Id}{Id}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\supp}{supp}
+
+% Fixed: \inner{u}{v}; auto-scaled: \inner*{u}{v}; explicit: \inner[\Big]{u}{v}.
+% Append ordinary subscripts: \inner{u}{v}_{H}.
+\DeclarePairedDelimiterX{\inner}[2]{\langle}{\rangle}{#1,\,#2}
+
+% Subscripted norms use \norm{x}_{p}, \norm*{x}_{p}, or \norm[\Big]{x}_{p}.
+
+% L^p space; append a domain explicitly: \Lp{p}\!\parens*{\Omega}.
+\NewDocumentCommand{\Lp}{m}{L^{#1}}
+
+\endinput

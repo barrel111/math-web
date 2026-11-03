@@ -20,25 +20,37 @@ end
 local function read_settings(document)
   local settings = document.meta["math-web"]
   if not settings or pandoc.utils.type(settings) ~= "table" then
-    fail("set 'math-web.macros' to a .sty path or a nonempty ordered list of paths")
+    fail("configure 'math-web.macros', 'math-web.hooks', or 'math-web.mappings'")
   end
   for _, key in ipairs({"filter", "include"}) do
     if settings[key] ~= nil then
       fail("'math-web." .. key .. "' has been removed; delete this setting; all imported definitions are always available")
     end
   end
+  local allowed = {macros = true, hooks = true, mappings = true}
+  for key in pairs(settings) do
+    if not allowed[key] then
+      fail("unknown setting 'math-web." .. tostring(key) .. "'; expected only macros, hooks, or mappings")
+    end
+  end
+  if settings.macros == nil and settings.hooks == nil and settings.mappings == nil then
+    fail("configure 'math-web.macros', 'math-web.hooks', or 'math-web.mappings'")
+  end
   return settings
 end
 
-local function read_style_entries(settings)
-  local macros = settings.macros
-  if macros and is_metadata_string(macros) then
-    return {macros}
+local function read_path_entries(settings, setting)
+  local value = settings[setting]
+  if value == nil then return {} end
+  if is_metadata_string(value) then
+    return {value}
   end
-  if macros and pandoc.utils.type(macros) == "List" and #macros > 0 then
-    return macros
+  if pandoc.utils.type(value) == "List" and (#value > 0 or setting == "hooks") then
+    return value
   end
-  fail("'math-web.macros' must be a .sty path or a nonempty ordered list of paths")
+  local description = setting == "macros" and "a .sty path or a nonempty ordered list of paths"
+    or "a Lua module path or an ordered list of paths"
+  fail("'math-web." .. setting .. "' must be " .. description)
 end
 
 local function renderer_name()
@@ -112,9 +124,8 @@ end
 
 local function transform_document(document, settings, renderer)
   if settings.hooks == nil then return document end
-  if pandoc.utils.type(settings.hooks) ~= "List" then fail("'math-web.hooks' must be a list of Lua module paths") end
   local handlers = {}
-  local paths = resolve_style_paths(settings.hooks, "hooks")
+  local paths = resolve_style_paths(read_path_entries(settings, "hooks"), "hooks")
   for _, path in ipairs(paths) do
     local ok, module = pcall(dofile, path)
     if not ok then fail("loading hook " .. path .. ": " .. tostring(module)) end
@@ -148,14 +159,18 @@ local function convert_document(document)
   if not quarto.doc.is_format("html") then return document end
 
   local settings = read_settings(document)
-  local entries = read_style_entries(settings)
+  local entries = read_path_entries(settings, "macros")
   local name = renderer_name()
   local paths = resolve_style_paths(entries)
-  local definitions, message, report = parser.parse_files(paths)
-  if not definitions then fail(message) end
-  for _, warning in ipairs(report.warnings) do
-    quarto.log.warning(string.format("%s:%d:%d: %s: %s", warning.source,
-      warning.line, warning.column, warning.kind, warning.message))
+  local definitions, message = {}
+  if #paths > 0 then
+    local report
+    definitions, message, report = parser.parse_files(paths)
+    if not definitions then fail(message) end
+    for _, warning in ipairs(report.warnings) do
+      quarto.log.warning(string.format("%s:%d:%d: %s: %s", warning.source,
+        warning.line, warning.column, warning.kind, warning.message))
+    end
   end
 
   definitions, message = mappings.apply(definitions, read_mappings(settings))

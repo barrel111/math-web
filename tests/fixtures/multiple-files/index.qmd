@@ -1,0 +1,12 @@
+---
+title: "Multiple style files"
+format: html
+html-math-method: katex
+---
+
+Each left expression should render like the explicit right-hand expansion.
+
+$$\domain \qquad \mathbb{R}^2$$
+$$\choice \qquad new$$
+$$\pair{a}{b} \qquad \left\langle a,b\right\rangle$$
+$$\rankop(A) \qquad \operatorname{rank}(A)$$

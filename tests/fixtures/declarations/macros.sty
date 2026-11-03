@@ -1,0 +1,20 @@
+% A commented declaration must not become a macro:
+% \newcommand{\commentOnly}{BAD}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\pair}[2]{\left\langle #1,\frac{#2}{2}\right\rangle}
+\newcommand{\choice}{old}
+\renewcommand{\choice}{new}
+\DeclareMathOperator{\rankop}{rank}
+\newcommand{\unused}{u}
+
+% Proposed syntax coverage beyond the minimal roadmap examples:
+\newcommand{\withDefault}[2][x]{#1+#2}
+\DeclareMathOperator*{\argmaxop}{arg\,max}
+\newcommand\bare{b}
+\newcommand {\spaced} [1] {
+  \frac{#1}{2}
+}
+\newcommand{\literalBraces}[1]{\{#1\}}
+\newcommand{\percent}{50\%}
+\newcommand{\joined}{a% Ignore this closing brace: }
++b}
